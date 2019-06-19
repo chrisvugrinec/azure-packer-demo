@@ -47,12 +47,6 @@ data "azurerm_image" "custom" {
   resource_group_name = "DefaultResourceGroup-EAU"
 }
 
-# Put the SSH pub key in Keyvault
-resource "azurerm_key_vault_secret" "devops-kv-secret" {
-  name     = "clientssh"
-  value    = "${var.ssh}"
-  key_vault_id = "${data.azurerm_key_vault.devops-kv.id}"
-}
 
 resource "azurerm_virtual_machine" "buildagent" {
   name                  = "${var.hostname}"
