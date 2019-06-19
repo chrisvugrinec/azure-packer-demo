@@ -1,4 +1,5 @@
 # azure-packer-demo
+<<<<<<< HEAD
 This demo shows you how to create an image of an Ansible customized Azure Devops VM and use this image to create a fleet of buildagents.
 
 pics/![](2019-06-19-12-41-07.png)
@@ -55,3 +56,6 @@ When the machines are provisioned you should be able to see the buildagents in t
 
 ![image.png](/.attachments/image-8a1af697-975b-4626-a67c-97482c7828dd.png)
 
+=======
+XXXThis demo shows you how to create an image of an Ansible customized Azure Devops VM and use this image to create a fleet of buildagents.
+>>>>>>> b7b9190fb32eb9037764f32fce0be3a3f1599230
