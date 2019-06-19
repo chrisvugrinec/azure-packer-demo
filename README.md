@@ -2,7 +2,7 @@
 
 This demo shows you how to create an image of an Ansible customized Azure Devops VM and use this image to create a fleet of buildagents.
 
-![](pics/2019-06-19-14-08-50.png)
+![](pics/2019-06-19-14-12-06.png)
 
 ![image.png](/.attachments/image-53a79d45-d49d-4db1-856d-c1686d6999df.png)
 
