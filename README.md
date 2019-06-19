@@ -5,6 +5,8 @@ This demo shows you how to create an image of an Ansible customized Azure Devops
 Azure provides a service for creating VM images as well:
 https://azure.microsoft.com/en-au/blog/announcing-private-preview-of-azure-vm-image-builder/
 
+See this in action [here](https://youtu.be/uRp_hix7JYI)
+
 # Azure Devops Buildagent
 ![](pics/2019-06-19-14-12-06.png)
 
