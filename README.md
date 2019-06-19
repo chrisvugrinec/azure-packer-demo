@@ -20,11 +20,17 @@ The buildagent in this demo needs to configured to do the following things:
 - Needs to run Docker and be able to build and publish images to an ACR
 - Needs to be able to connect and deploy to the K8 environment
 
+Optional Quality Assurance measurements could be:
+- Connectivity; the configured buildagent is the only vm which is able to access the deployment environments (for eg prod/acc).
+- Trusted repos; the buildagent could be configured to use only trusted repositories
+- Code scanning; the buildagent can be configured to run certain code quality tasks and vulnarability assesments
+
 ## Localhost Buildagent
 
 ![](pics/2019-06-19-14-15-30.png)
 
 This demonstrates how to setup a buildagent on your localmachine. Vagrant is repsonsible for packaging the desired machine into a Virtualbox image that can run on any local development machine. The machine is provisioned with an Ansible cookbook. The sourcecode for this can be found [here](https://github.com/chrisvugrinec/azure-packer-demo/tree/master/buildagent/vagrant)
+NB: Packer can create Vagrant Images as well, however for using Vagrant for this is way easier.
 
 In order to run this do the following:
 - Checkout the sourcecode and cd into the vagrant folder (the folder where the Vagrantfile resides)
@@ -38,7 +44,7 @@ In order to run this do the following:
 
 If you are happy with the output of your local ansible cookbook, you can use the same ansible cookbook in order to create a machine on Azure.
 
-With Packer you can create an Azure Image which in this case is provisioned with the same ansible cookbook as the local image. 
+With Packer you can create an Azure Image which in this case is provisioned with the same ansible cookbook as the local image.
 
 Based on the Image you can create VM's on Azure that will function as buildagents, the following options are available:
 - Azure; use the default tools like: Azure Portal, Azure ARM templates, Azure CLI/Powershell 
