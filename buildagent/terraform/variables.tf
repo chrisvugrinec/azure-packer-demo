@@ -13,3 +13,5 @@ variable "CLIENT_SECRET" {}
 variable "TENANT_ID" {}
 variable "PAT" {}
 variable "SSH" {}
+variable "OBJECT_ID" {}
+
