@@ -1,0 +1,8 @@
+[EfficiOS-RHEL7-x86-64]
+name=EfficiOS RHEL7 x86-64
+enabled=1
+autorefresh=1
+baseurl=http://packages.efficios.com/rhel/7/x86_64/latest/
+type=rpm-md
+gpgcheck=0
+gpgkey=https://packages.efficios.com/rhel/repo.key

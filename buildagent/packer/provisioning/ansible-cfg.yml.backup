@@ -1,0 +1,156 @@
+---
+- name: run the playbook tasks on the localhost
+  hosts: 127.0.0.1 
+  connection: local
+  remote_user: vagrant
+  become_user: root
+  vars:
+    devops_organization: dude-projects
+    devops_pat: "{{ lookup('env','TF_VAR_PAT') }}"
+    timezone: Australia/Sydney
+  tasks:
+    - name: Install yum utils
+      yum:
+        name: yum-utils
+        state: latest
+      become: yes
+    - file:
+        path: /home/vagrant/agent_work/
+        state: directory
+        mode: 0755
+        owner: vagrant
+        group: vagrant
+    - name: Install lvm2
+      yum:
+        name: lvm2
+        state: latest
+      become: yes
+    - name:  Needed to get latest version of GIT, not preferred method
+      yum:
+        name: https://centos7.iuscommunity.org/ius-release.rpm
+        state: present
+      become: yes 
+    - name:  Intall Git 2u, Needed to get latest version of GIT, not preferred method
+      yum:
+        name: git2u-all
+        state: latest
+      become: yes
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docer-ce.repo
+      become: yes
+    - name: Enable Docker Edge repo
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        section: 'docker-ce-edge'
+        option: enabled
+        value: 0
+      become: yes
+    - name: Enable Docker Test repo
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        section: 'docker-ce-test'
+        option: enabled
+        value: 0
+      become: yes
+    - name: Install Docker
+      package:
+        name: docker-ce
+        state: latest
+      become: yes
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      become: yes
+    - name:  Permission FIX for Docker
+      shell: sudo chown vagrant /var/run/docker.sock
+      become: yes 
+    - name: Add an ASC key
+      rpm_key:
+        key: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+      become: yes
+    - name:  Install HELM
+      shell: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+#    - name:  init HELM
+#      shell: helm init --client-only
+    - name: copying azure-cli repo file with owner and permissions
+      copy:
+        src: /vagrant/azure-cli.repo
+        dest: /etc/yum.repos.d/azure-cli.repo
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+      become: yes
+    - name: Ensures /home/vagrant/.kube exists
+      file: path=/home/vagrant/.kube state=directory
+    - name: copying kube config, warning copies all contexts to the buildagent
+      copy:
+        src: /vagrant/config
+        dest: /home/vagrant/.kube/config
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+      become: yes
+
+    - name: copying kube-cli repo file with owner and permissions
+      copy:
+        src: /vagrant/kube-cli.repo
+        dest: /etc/yum.repos.d/kube-cli.repo
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+      become: yes
+
+    - name: ensure a list of packages installed
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - httpd
+        - httpd-tools
+        - net-tools
+        - azure-cli
+        - kubectl
+        - python-pip
+        - jq
+      become: yes
+
+    - name: Install NTP
+      yum: name=ntp state=installed 
+      tags: ntp
+      become: yes
+ 
+    - name: Make sure NTP is started up
+      service: name=ntpd state=started enabled=yes
+      tags: ntp
+      become: yes
+
+    - name: Sync hwclock
+      shell: hwclock -w
+      tags: ntp
+      become: yes
+
+    - name: set timezone 
+      shell: timedatectl set-timezone {{ timezone }}
+      become: yes
+
+    - name: install linux linux-headers
+      action: shell yum install linux-headers-$(uname -r) build-essential dkms -y
+      ignore_errors: True
+      become: yes
+
+    - name: Add user vagrant to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+      become: yes
+
+    - name:  Configure connection buildagent with workspace
+      shell: sh /vagrant/agent.sh {{ devops_organization }} {{ devops_pat }}
+      async: 2592000               # 60*60*24*30 – 1 month
+      poll: 0

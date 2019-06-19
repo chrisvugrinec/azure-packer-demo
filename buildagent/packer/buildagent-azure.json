@@ -1,0 +1,55 @@
+{
+
+  "variables": {
+    "client_id": "{{env `TF_VAR_CLIENT_ID`}}",
+    "client_secret": "{{env `TF_VAR_CLIENT_SECRET`}}",
+    "tenant_id": "{{env `TF_VAR_TENANT_ID`}}",
+    "subscription_id": "{{env `TF_VAR_SUBSCRIPTION_ID`}}",
+    "pat": "{{env `TF_VAR_PAT`}}"
+  },
+  "builders": [
+    {
+      "type": "azure-arm",
+
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "tenant_id": "{{user `tenant_id`}}",
+      "subscription_id": "{{user `subscription_id`}}",
+
+      "managed_image_resource_group_name": "DefaultResourceGroup-EAU",
+      "managed_image_name": "buildagent1",
+
+      "os_type": "Linux",
+      "image_publisher": "OpenLogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.5",
+
+      "azure_tags": {
+        "dept": "Engineering",
+        "task": "Image deployment"
+      },
+
+      "location": "australiaeast",
+      "vm_size": "Standard_DS3_v2"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "sleep 30",
+        "/usr/bin/yum update",
+        "/usr/bin/yum -y install ansible",
+        "hostnamectl set-hostname buildagent1"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "provisioning/ansible-cfg.yml",
+      "playbook_dir": "provisioning",
+      "command": "ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook",
+      "extra_arguments": "--extra-vars TF_VAR_PAT={{user `pat`}}"
+    }
+  ]
+}

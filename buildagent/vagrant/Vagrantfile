@@ -1,0 +1,26 @@
+VAGRANTFILE_API_VERSION = "2"
+  Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "centos/7"
+  config.vm.synced_folder "./provisioning", "/vagrant", disabled: false
+  config.vm.provision :shell, inline: "echo 'source /vagrant/setenv.sh' > /etc/profile.d/setenv.sh", :run => 'always'
+  config.vm.network :public_network, :bridge => "bridge0"
+
+  config.vm.provision :ansible_local do |ansible|
+    #config.vm.define "buildagent1"
+    #config.vm.hostname = "buildagent1"
+    ansible.playbook = "/vagrant/ansible-cfg.yml"
+    ansible.limit = "all,localhost"
+    ansible.verbose = true
+    ansible.host_vars = {
+      "devops-buildagent1" => {"http_port" => 80, "maxRequestsPerChild" => 808}
+    }
+  end
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "6144"]
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000 ]
+  end
+ end
+
