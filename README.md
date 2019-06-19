@@ -1,10 +1,9 @@
 # azure-packer-demo
 
-This demo shows you how to create an image of an Ansible customized Azure Devops VM and use this image to create a fleet of buildagents.
+This demo shows you how to create an image of an Ansible customized Azure Devops VM. We can use this image to create a 1 Azure VM or even a fleet of VM's which will act as a pool of buildagents.
 
+# Buildagent
 ![](pics/2019-06-19-14-12-06.png)
-
-![image.png](/.attachments/image-53a79d45-d49d-4db1-856d-c1686d6999df.png)
 
 The buildagent is part of a pool of agents and is basically a machine that is configured to connect to a devops environment and execute the desired Azure DevOps build and release  tasks.
 
@@ -22,9 +21,8 @@ The buildagent in this demo needs to configured to do the following things:
 - Needs to be able to connect and deploy to the K8 environment
 
 ## Localhost Buildagent
-.
 
-![image.png](/.attachments/image-2c2bae41-4f98-4881-a024-cb5efbe3b2d9.png)
+![](pics/2019-06-19-14-15-30.png)
 
 This demonstrates how to setup a buildagent on your localmachine. Vagrant is repsonsible for packaging the desired machine into a Virtualbox image that can run on any local development machine. The machine is provisioned with an Ansible cookbook. The sourcecode for this can be found [here](https://dev.azure.com/dude-projects/_git/woolies-aks-poc?path=%2Finfra%2Fbuildagent%2Fvagrant&version=GBinfra)
 
@@ -35,9 +33,8 @@ In order to run this do the following:
 - You can SSH into this box with the following command: **_vagrant ssh_**
 
 ## Azure VM Buildagent
-.
 
-![image.png](/.attachments/image-0e06d8c6-efb7-42ab-854a-52b9e0ab1336.png)
+![](pics/2019-06-19-14-16-36.png)
 
 If you are happy with the output of your local ansible cookbook, you can use the same ansible cookbook in order to create a machine on Azure.
 
@@ -54,8 +51,4 @@ The sourcecode for creating an azure vm based on a custom image can be found [he
 
 When the machines are provisioned you should be able to see the buildagents in the agent pool config of your devops project:
 
-![image.png](/.attachments/image-8a1af697-975b-4626-a67c-97482c7828dd.png)
-
-=======
-XXXThis demo shows you how to create an image of an Ansible customized Azure Devops VM and use this image to create a fleet of buildagents.
->>>>>>> b7b9190fb32eb9037764f32fce0be3a3f1599230
+![](pics/2019-06-19-14-18-37.png)
