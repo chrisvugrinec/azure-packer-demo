@@ -11,6 +11,5 @@ variable "subnet" { default = "devopssubnet1" }
 variable "CLIENT_ID" {}
 variable "CLIENT_SECRET" {}
 variable "TENANT_ID" {}
-variable "OBJECT_ID" {}
 variable "PAT" {}
 variable "SSH" {}
