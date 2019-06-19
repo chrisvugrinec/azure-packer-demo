@@ -1,8 +1,8 @@
-# azure-packer-demo
+# Azure Packer Demo
 
 This demo shows you how to create an image of an Ansible customized Azure Devops VM. We can use this image to create a 1 Azure VM or even a fleet of VM's which will act as a pool of buildagents.
 
-# Buildagent
+# Azure Devops Buildagent
 ![](pics/2019-06-19-14-12-06.png)
 
 The buildagent is part of a pool of agents and is basically a machine that is configured to connect to a devops environment and execute the desired Azure DevOps build and release  tasks.
@@ -24,7 +24,7 @@ The buildagent in this demo needs to configured to do the following things:
 
 ![](pics/2019-06-19-14-15-30.png)
 
-This demonstrates how to setup a buildagent on your localmachine. Vagrant is repsonsible for packaging the desired machine into a Virtualbox image that can run on any local development machine. The machine is provisioned with an Ansible cookbook. The sourcecode for this can be found [here](https://dev.azure.com/dude-projects/_git/woolies-aks-poc?path=%2Finfra%2Fbuildagent%2Fvagrant&version=GBinfra)
+This demonstrates how to setup a buildagent on your localmachine. Vagrant is repsonsible for packaging the desired machine into a Virtualbox image that can run on any local development machine. The machine is provisioned with an Ansible cookbook. The sourcecode for this can be found [here](https://github.com/chrisvugrinec/azure-packer-demo/tree/master/buildagent/vagrant)
 
 In order to run this do the following:
 - Checkout the sourcecode and cd into the vagrant folder (the folder where the Vagrantfile resides)
@@ -44,10 +44,9 @@ Based on the Image you can create VM's on Azure that will function as buildagent
 - Azure; use the default tools like: Azure Portal, Azure ARM templates, Azure CLI/Powershell 
 - Third party solutions; Like Terraform
 
+The sourcecode for creating a packer image can be found [here](https://github.com/chrisvugrinec/azure-packer-demo/tree/master/buildagent/packer).
 
-The sourcecode for creating a packer image can be found [here](https://dev.azure.com/dude-projects/_git/woolies-aks-poc?path=%2Finfra%2Fbuildagent%2Fpacker&version=GBinfra).
-
-The sourcecode for creating an azure vm based on a custom image can be found [here](https://dev.azure.com/dude-projects/_git/woolies-aks-poc?path=%2Finfra%2Fbuildagent%2Fterraform&version=GBinfra).
+The sourcecode for creating an azure vm based on a custom image can be found [here](https://github.com/chrisvugrinec/azure-packer-demo/tree/master/buildagent/terraform).
 
 When the machines are provisioned you should be able to see the buildagents in the agent pool config of your devops project:
 
